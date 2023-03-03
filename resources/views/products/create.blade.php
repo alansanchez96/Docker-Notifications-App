@@ -1,4 +1,5 @@
 @extends('app')
+@include('components.navbar')
 
 <form action="{{ route('product.store') }}" class="w-2/5 mx-auto my-10 pb-10" method="post">
     @csrf
