@@ -5,8 +5,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\AuthController;
+use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 
-Route::get('/', [HomeController::class, 'index'])->name('welcome');
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('welcome');
+    Route::get('/markAsRead', 'markAsRead')->name('markAsRead');
+    Route::post('/read-notification/{id}', 'readNotification')->name('readNotification');
+});
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'loginView')->name('login.view');

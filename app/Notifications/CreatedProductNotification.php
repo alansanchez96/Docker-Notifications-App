@@ -30,7 +30,7 @@ class CreatedProductNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -55,7 +55,8 @@ class CreatedProductNotification extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'name' => $this->product->name
+            'product_name' => $this->product->name,
+            'product_description' => $this->product->description
         ];
     }
 }
