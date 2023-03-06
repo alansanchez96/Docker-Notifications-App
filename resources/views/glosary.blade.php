@@ -1,7 +1,6 @@
 <div class="bg-gray-300 p-5 rounded my-10">
     <h1 class="text-3xl font-bold text-center my-6">
         Glosario
-        @include('components.notify')
     </h1>
     @if (session('create'))
         @include('components.toast-success')

@@ -1,6 +1,6 @@
 @auth
     <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification"
-        class="inline-flex items-center relative top-3 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none"
+        class="inline-flex items-center relative top-0 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none"
         type="button">
         <div class="p-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="text-gray-600 w-8 h-8" viewBox="0 0 16 16">
