@@ -13,9 +13,7 @@ class CreatedProductNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $user;
-
-    public $product;
+    public $user, $product;
 
     public function __construct(User $user, Product $product)
     {

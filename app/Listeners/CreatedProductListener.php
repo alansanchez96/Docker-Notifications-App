@@ -21,7 +21,7 @@ class CreatedProductListener
     public function handle(CreatedProductEvent $event): void
     {
         User::all()
-            ->each(fn (User $user, $event) =>
+            ->each(fn (User $user) =>
             Notification::send($user, new CreatedProductNotification(
                 $user,
                 $event->product
