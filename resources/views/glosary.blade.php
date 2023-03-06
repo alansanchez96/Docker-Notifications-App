@@ -17,5 +17,9 @@
             <a class="text-center block mx-auto rounded my-4 text-white py-2 w-3/6 bg-gray-800 hover:text-blue-400 hover:bg-gray-900 font-bold"
                 href="{{ route('product.create') }}">Crear producto. Activara notificaciones y eventos con Queue</a>
         </li>
+        <li>
+            <a class="text-center block mx-auto rounded my-4 text-white py-2 w-3/6 bg-gray-800 hover:text-blue-400 hover:bg-gray-900 font-bold"
+                href="{{ route('file.index') }}">Manipulacion de FileStorage</a>
+        </li>
     </ol>
 </div>

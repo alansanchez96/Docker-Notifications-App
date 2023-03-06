@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\AuthController;
-use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('welcome');
@@ -21,6 +21,15 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logout')->name('logout');
 });
 
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/create/product', 'create')->name('product.create');
+    Route::post('/create/product', 'store')->name('product.store')->middleware('auth');
+});
+
+Route::controller(FileController::class)->group(function () {
+    Route::get('/file-storage', 'index')->name('file.index');
+    Route::post('/file-storage', 'uploadFile')->name('uploadFile');
+    Route::get('/file-storage/download/{file}', 'downloadFile')->name('downloadFile');
+});
+
 Route::get('/send-mails', [MailController::class, 'sendMails'])->name('mail.sends');
-Route::get('/create/product', [ProductController::class, 'create'])->name('product.create');
-Route::post('/create/product', [ProductController::class, 'store'])->name('product.store');
