@@ -26,18 +26,49 @@
             @forelse (auth()->user()->unreadNotifications as $notification)
                 <div class="flex px-4 py-3 cursor-pointer hover:bg-gray-100">
                     <div class="w-full">
-                        <div class="text-gray-500 text-center text-sm mb-1.5">Se ha creado un nuevo producto: <span
-                                class="font-bold text-emerald-600">{{ $notification->data['product_name'] }}</span>
-                            <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
-                            <form method="post" action="{{ route('readNotification', $notification->id) }}">
-                                @csrf
-                                <input type="hidden" name="id" value="{{ $notification->id }}">
-                                <button onclick="readNotification"
-                                    class="text-xs text-blue-400 hover:text-blue-700 hover:underline">
-                                    Marcar como leída
-                                </button>
-                            </form>
-                        </div>
+                        @if ($notification->type == 'App\Notifications\CreatedProductNotification')
+                            <div class="text-gray-500 text-center text-sm mb-1.5">Se ha creado un nuevo producto: <span
+                                    class="font-bold text-emerald-600">{{ $notification->data['product_name'] }}</span>
+                                <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
+                                <form method="post" action="{{ route('readNotification', $notification->id) }}">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $notification->id }}">
+                                    <button onclick="readNotification"
+                                        class="text-xs text-blue-400 hover:text-blue-700 hover:underline">
+                                        Marcar como leída
+                                    </button>
+                                </form>
+                            </div>
+                        @elseif ($notification->type === 'App\Notifications\AuthUserHasSentEmailsNotification')
+                            <div class="text-gray-500 text-center text-sm mb-1.5">Hola <span
+                                    class="font-bold text-emerald-600">{{ $notification->data['user_name'] }}, </span>
+                                has enviado un correo a todos los usuarios registrados
+                                <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
+                                <form method="post" action="{{ route('readNotification', $notification->id) }}">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $notification->id }}">
+                                    <button onclick="readNotification"
+                                        class="text-xs text-blue-400 hover:text-blue-700 hover:underline">
+                                        Marcar como leída
+                                    </button>
+                                </form>
+                            </div>
+                        @elseif ($notification->type === 'App\Notifications\ReceiveEmailNotification')
+                            <div class="text-gray-500 text-center text-sm mb-1.5">Hola <span
+                                    class="font-bold text-emerald-600">{{ $notification->data['user_name'] }}, </span>
+                                has recibido un tipo de notificacion general por parte de
+                                <span class="font-bold text-emerald-600">{{ $notification->data['userAuthor_name'] }}</span>
+                                <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
+                                <form method="post" action="{{ route('readNotification', $notification->id) }}">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $notification->id }}">
+                                    <button onclick="readNotification"
+                                        class="text-xs text-blue-400 hover:text-blue-700 hover:underline">
+                                        Marcar como leída
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @empty
@@ -51,10 +82,25 @@
             @forelse (auth()->user()->readNotifications as $notification)
                 <a href="#" class="flex px-4 py-3 hover:bg-gray-100">
                     <div class="w-full">
-                        <div class="text-gray-500 text-center text-sm mb-1.5">Se ha creado un nuevo producto: <span
-                                class="font-bold text-emerald-600">{{ $notification->data['product_name'] }}</span>
-                            <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
-                        </div>
+                        @if ($notification->type == 'App\Notifications\CreatedProductNotification')
+                            <div class="text-gray-500 text-center text-sm mb-1.5">Se ha creado un nuevo producto: <span
+                                    class="font-bold text-emerald-600">{{ $notification->data['product_name'] }}</span>
+                                <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
+                            </div>
+                        @elseif ($notification->type === 'App\Notifications\AuthUserHasSentEmailsNotification')
+                            <div class="text-gray-500 text-center text-sm mb-1.5">Hola <span
+                                    class="font-bold text-emerald-600">{{ $notification->data['user_name'] }}, </span>
+                                has enviado un correo a todos los usuarios registrados
+                                <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
+                            </div>
+                        @elseif ($notification->type === 'App\Notifications\ReceiveEmailNotification')
+                            <div class="text-gray-500 text-center text-sm mb-1.5">Hola <span
+                                    class="font-bold text-emerald-600">{{ $notification->data['user_name'] }}, </span>
+                                has recibido un tipo de notificacion general por parte de
+                                <span class="font-bold text-emerald-600">{{ $notification->data['userAuthor_name'] }}</span>
+                                <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
+                            </div>
+                        @endif
                     </div>
                 </a>
             @empty

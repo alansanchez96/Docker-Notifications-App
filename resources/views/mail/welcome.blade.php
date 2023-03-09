@@ -15,7 +15,9 @@
 <body>
     <h1>Correo:</h1>
 
-    <h2>Bienvenido: {{ $user->name }}</h2>
+    <h2>Hola: {{ $user->name }}</h2>
+
+    <p>El usuario {{ $userAuthor->name }} ha activado la notificacion masiva a todos los usuarios</p>
 </body>
 
 </html>

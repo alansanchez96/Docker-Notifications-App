@@ -2,6 +2,6 @@
 
 @section('content')
     @include('components.navbar')
-    @include('glosary')
+    @include('actions')
     @include('products.index')
 @endsection

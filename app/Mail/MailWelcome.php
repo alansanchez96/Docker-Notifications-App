@@ -14,11 +14,12 @@ class MailWelcome extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(public User $user)
+    public $user, $userAuthor;
+
+    public function __construct(User $user, User $userAuthor)
     {
+        $this->user = $user;
+        $this->userAuthor = $userAuthor;
     }
 
     /**
@@ -27,7 +28,7 @@ class MailWelcome extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Correo de Bienvenida',
+            subject: 'Te ha llegado un correo de LaravelApplication',
         );
     }
 

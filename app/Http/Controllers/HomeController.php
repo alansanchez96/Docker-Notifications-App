@@ -2,17 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::select('id', 'name', 'description')->get();
+        if (Cache::has('products')) {
+            $products = Cache::get('products');
+        } else {
+            $products = Product::select('id', 'name', 'description')->get();
+            Cache::put('products', $products);
+        }
 
-        return view('welcome', compact('products'));
+        $users = User::all();
+
+        return view('welcome', compact('products', 'users'));
     }
 
     public function markAsRead()

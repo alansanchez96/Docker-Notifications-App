@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CreatedProductEvent;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Events\CreatedProductEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 
@@ -15,7 +14,7 @@ class ProductController extends Controller
         return view('products.create');
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         $product = Product::create($request->all());
 
