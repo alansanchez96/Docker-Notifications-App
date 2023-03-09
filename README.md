@@ -5,6 +5,8 @@
 Cambiar el nombre de .env.example a .env
 En el archivo de variables de entorno (.env) ingresar credenciales de email
 Puede optar por MailHog, Mailtrap entre otros...
+Tambien podrá configurarlo a su gusto
+Por defecto en este repositorio las variables de entorno vendran configuradas con Redis
 
 #### Instalacion
 Ejecutar en consola
@@ -14,3 +16,7 @@ Ejecutar en consola
 
 #### Inicializacion
 `php artisan serve`
+`php artisan queue:work`
+
+*si opta por utilizar redis asegurese de inicalizar su servidor de redis*
+
