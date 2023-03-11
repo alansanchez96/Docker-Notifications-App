@@ -57,7 +57,8 @@
                             <div class="text-gray-500 text-center text-sm mb-1.5">Hola <span
                                     class="font-bold text-emerald-600">{{ $notification->data['user_name'] }}, </span>
                                 has recibido un tipo de notificacion general por parte de
-                                <span class="font-bold text-emerald-600">{{ $notification->data['userAuthor_name'] }}</span>
+                                <span
+                                    class="font-bold text-emerald-600">{{ $notification->data['userAuthor_name'] }}</span>
                                 <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
                                 <form method="post" action="{{ route('readNotification', $notification->id) }}">
                                     @csrf
@@ -83,6 +84,8 @@
                 <a href="#" class="flex px-4 py-3 hover:bg-gray-100">
                     <div class="w-full">
                         @if ($notification->type == 'App\Notifications\CreatedProductNotification')
+                            <div id="productNotify"></div>
+
                             <div class="text-gray-500 text-center text-sm mb-1.5">Se ha creado un nuevo producto: <span
                                     class="font-bold text-emerald-600">{{ $notification->data['product_name'] }}</span>
                                 <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
@@ -97,7 +100,8 @@
                             <div class="text-gray-500 text-center text-sm mb-1.5">Hola <span
                                     class="font-bold text-emerald-600">{{ $notification->data['user_name'] }}, </span>
                                 has recibido un tipo de notificacion general por parte de
-                                <span class="font-bold text-emerald-600">{{ $notification->data['userAuthor_name'] }}</span>
+                                <span
+                                    class="font-bold text-emerald-600">{{ $notification->data['userAuthor_name'] }}</span>
                                 <div class="text-xs text-stone-400">{{ $notification->created_at->diffForHumans() }}</div>
                             </div>
                         @endif
@@ -124,11 +128,3 @@
         </a>
     </div>
 @endauth
-
-@section('scripts')
-    <script>
-        function readNotification() {
-
-        }
-    </script>
-@endsection

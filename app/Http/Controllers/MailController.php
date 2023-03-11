@@ -14,6 +14,6 @@ class MailController extends Controller
     {
         event(new MailsSubmittedEvent(auth()->user()));
 
-        return redirect()->route('welcome')->with('create', 'Los emails se han sido añadidos a la cola');
+        return redirect()->route('welcome')/* ->with('create', 'Los emails se han sido añadidos a la cola') */;
     }
 }

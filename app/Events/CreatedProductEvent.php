@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,15 +12,16 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class CreatedProductEvent
+class CreatedProductEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $product;
+    public $product, $user;
 
-    public function __construct(Product $product)
+    public function __construct(Product $product, User $user)
     {
         $this->product = $product;
+        $this->user = $user;
     }
 
     /**
@@ -30,7 +32,25 @@ class CreatedProductEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new Channel('created-product-channel'),
+        ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'CreatedProduct';
+    }
+
+    public function broadcastWith(): array
+    {
+        $message = 'El usuario ';
+        $message .= $this->user->name;
+        $message .= ' ha creado el producto <span class="text-bold text-green-700">';
+        $message .= $this->product->name;
+        $message .= '</span>';
+
+        return [
+            'message' => $message
         ];
     }
 }

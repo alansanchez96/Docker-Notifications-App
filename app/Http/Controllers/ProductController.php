@@ -18,8 +18,8 @@ class ProductController extends Controller
     {
         $product = Product::create($request->all());
 
-        event(new CreatedProductEvent($product));
+        event(new CreatedProductEvent($product, auth()->user()));
 
-        return redirect()->route('welcome')->with('create', 'El producto se ha creado correctamente');
+        return redirect()->route('welcome')/* ->with('create', 'El producto se ha creado correctamente') */;
     }
 }

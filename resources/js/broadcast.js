@@ -1,4 +1,23 @@
-<div id="toast-success"
+const toast = document.querySelector('#toast');
+
+window.Echo.channel('created-product-channel')
+    .listen('.CreatedProduct', (data) => {
+        toastNotify(toast, data.message);
+        setTimeout(() => {
+            toast.innerHTML = null;
+        }, 5000);
+    })
+
+window.Echo.channel('email-submitted-channel')
+    .listen('.EmailSubmitted', data => {
+        toastNotify(toast, data.message);
+        setTimeout(() => {
+            toast.innerHTML = null;
+        }, 5000);
+    })
+
+function toastNotify(element, message) {
+    element.innerHTML = `<div id="toast-success"
     class="flex absolute z-50 bottom-5 right-5 items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
     role="alert">
     <div
@@ -10,7 +29,7 @@
         </svg>
         <span class="sr-only">Check icon</span>
     </div>
-    <div class="ml-3 text-sm font-normal">{{ session('create') }}</div>
+    <div class="ml-3 text-sm font-normal">${message}</div>
     <button type="button"
         class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
         data-dismiss-target="#toast-success" aria-label="Close">
@@ -22,4 +41,7 @@
                 clip-rule="evenodd"></path>
         </svg>
     </button>
-</div>
+</div>`;
+}
+
+
