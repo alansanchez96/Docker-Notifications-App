@@ -17,7 +17,7 @@
 
 </head>
 
-<body class="container mx-auto bg-gray-100">
+<body class="container mx-auto bg-gray-200">
 
     @yield('content')
 

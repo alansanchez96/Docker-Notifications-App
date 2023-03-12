@@ -9,8 +9,8 @@
             </svg>
         </div>
         @if (auth()->user()->unreadNotifications())
-            <span class="absolute bg-red-500 rounded-full left-6 top-3 w-4 h-4">
-                <span class="text-white absolute" style="bottom:-1px; left:5px;font-size:12px;">
+            <span class="absolute bg-rose-500 rounded-full left-6 top-3 w-4 h-4">
+                <span class="text-white font-bold absolute" style="bottom:-1px; left:5px;font-size:12px;">
                     {{ count(auth()->user()->unreadNotifications) }}
                 </span>
             </span>

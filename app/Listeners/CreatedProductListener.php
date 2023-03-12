@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Adapters\CacheAdapter;
 use App\Models\User;
 use App\Models\Product;
 use App\Events\CreatedProductEvent;
@@ -13,6 +14,8 @@ use App\Notifications\CreatedProductNotification;
 
 class CreatedProductListener
 {
+    use CacheAdapter;
+
     public function __construct()
     {
     }
@@ -22,8 +25,7 @@ class CreatedProductListener
      */
     public function handle(CreatedProductEvent $event): void
     {
-        Cache::forget('products');
-        Cache::forever('products', Product::select('id', 'name', 'description')->get());
+        $this->cacheProducts();
 
         User::all()
             ->each(fn (User $user) =>

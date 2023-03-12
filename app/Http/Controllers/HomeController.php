@@ -12,16 +12,9 @@ class HomeController extends Controller
 {
     public function index()
     {
-        if (Cache::has('products')) {
-            $products = Cache::get('products');
-        } else {
-            $products = Product::select('id', 'name', 'description')->get();
-            Cache::put('products', $products);
-        }
-
         $users = User::all();
 
-        return view('welcome', compact('products', 'users'));
+        return view('welcome', compact('users'));
     }
 
     public function markAsRead()
