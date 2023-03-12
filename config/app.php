@@ -195,6 +195,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
+        App\Providers\CacheServiceProvider::class,
     ],
 
     /*
@@ -211,6 +214,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'CacheComposite' => App\Classes\Facades\CacheComposite::class
     ])->toArray(),
 
 ];

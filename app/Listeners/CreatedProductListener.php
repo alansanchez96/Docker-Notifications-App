@@ -2,11 +2,10 @@
 
 namespace App\Listeners;
 
-use App\Adapters\CacheAdapter;
 use App\Models\User;
 use App\Models\Product;
 use App\Events\CreatedProductEvent;
-use Illuminate\Support\Facades\Cache;
+use App\Classes\Facades\CacheComposite;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
@@ -14,8 +13,6 @@ use App\Notifications\CreatedProductNotification;
 
 class CreatedProductListener
 {
-    use CacheAdapter;
-
     public function __construct()
     {
     }
@@ -25,7 +22,11 @@ class CreatedProductListener
      */
     public function handle(CreatedProductEvent $event): void
     {
-        $this->cacheProducts();
+        CacheComposite::updateCache(
+            Product::class,
+            'products',
+            ['id', 'name', 'description', 'category_id']
+        );
 
         User::all()
             ->each(fn (User $user) =>

@@ -15,6 +15,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
 
+    @livewireStyles
 </head>
 
 <body class="container mx-auto bg-gray-200">
@@ -23,6 +24,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
     @yield('scripts')
+    @livewireScripts
 </body>
 
 </html>

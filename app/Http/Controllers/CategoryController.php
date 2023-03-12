@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Facades\CacheComposite;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,7 +17,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         Category::create($request->all());
-        
+        CacheComposite::updateCache(Category::class, 'categories', ['id', 'name']);
+
         return redirect()->route('product.index');
     }
 }

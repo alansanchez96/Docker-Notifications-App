@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
+use App\Classes\Facades\CacheComposite;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = CacheComposite::getCacheOrCreate('users', User::class, ['id', 'name']);
 
         return view('welcome', compact('users'));
     }

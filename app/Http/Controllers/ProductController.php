@@ -2,31 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Adapters\CacheAdapter;
 use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Events\CreatedProductEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use Illuminate\Support\Facades\Cache;
+use App\Classes\Facades\CacheComposite;
 
 class ProductController extends Controller
 {
-    use CacheAdapter;
-
     public function index()
     {
-        if (Cache::has('products')) {
-            $products = Cache::get('products');
-        } else {
-            $products = $this->cacheProducts();
-            Cache::put('products', $products);
-        }
+        $products = CacheComposite::getCacheOrCreate(
+            'products',
+            Product::class,
+            ['id', 'name', 'description', 'category_id']
+        );
 
-        $categories = Category::select('id', 'name')->get();
+        $categories = CacheComposite::getCacheOrCreate(
+            'categories',
+            Category::class,
+            ['id', 'name']
+        );
 
-        return view('products.index', compact('products', 'categories'));
+        return view('livewire.product-index', compact('products', 'categories'));
     }
 
     public function create()
@@ -48,39 +47,29 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        $this->cacheProducts();
-
-        return redirect()->route('product.index');
-    }
-
-    public function forceDelete($id)
-    {
-        Product::onlyTrashed()->findOrFail($id)->forceDelete();
-
-        $this->cacheProducts();
+        CacheComposite::updateCache(
+            Product::class,
+            'products',
+            ['id', 'name', 'description', 'category_id']
+        );
 
         return redirect()->route('product.index');
     }
 
     public function trash()
     {
-        $products = Product::withTrashed()
-            ->select('id', 'name', 'description', 'category_id')
-            ->whereNotNull('deleted_at')
-            ->with(['category' => fn ($query) => $query->select('id', 'name')])
-            ->get();
+        $products = CacheComposite::getCacheOrCreate(
+            'productsTrash',
+            Product::class,
+            ['id', 'name', 'description', 'category_id']
+        );
 
-        $categories = Category::select('id', 'name')->get();
+        $categories = CacheComposite::getCacheOrCreate(
+            'categories',
+            Category::class,
+            ['id', 'name']
+        );
 
-        return view('products.trash', compact('products', 'categories'));
-    }
-
-    public function restore($id)
-    {
-        Product::withTrashed()->findOrFail($id)->restore();
-
-        $this->cacheProducts();
-
-        return redirect()->route('product.index');
+        return view('livewire.product-trash', compact('products', 'categories'));
     }
 }
