@@ -76,11 +76,11 @@
                                 {{ $product->description }}
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <button
+                                <button wire:method="delete" wire:loading.attr="disabled"
                                     wire:click.prevent="{{ auth()->check() ? 'deleteProduct(' . $product->id . ')' : 'redirectToLogin' }}"
-                                    wire:method="delete" wire:loading.attr="disabled"
-                                    class="px-4 py-2 bg-rose-500 text-gray-100 rounded-xl font-bold hover:bg-rose-600">Enviar
-                                    a papelera</button>
+                                    class="px-4 py-2 bg-rose-500 text-gray-100 rounded-xl font-bold hover:bg-rose-600">
+                                    Enviar a papelera
+                                </button>
                             </td>
                         </tr>
                     @endforeach

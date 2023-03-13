@@ -35,7 +35,7 @@
         <button class="text-gray-100 bg-rose-500 hover:bg-rose-700 px-4 py-2 rounded-xl font-bold">
             Iniciar sesión
         </button>
-        <a href="{{route('register.view')}}" class="my-5 font-bold text-gray-800 hover:text-rose-500">
+        <a href="{{ route('register.view') }}" class="my-5 font-bold text-gray-800 hover:text-rose-500">
             Si no estas registrado, entra aqui
         </a>
     </div>

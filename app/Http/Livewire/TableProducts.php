@@ -7,7 +7,6 @@ use Livewire\Component;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Classes\Facades\CacheComposite;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TableProducts extends Component
 {
@@ -41,7 +40,7 @@ class TableProducts extends Component
 
     public function redirectToLogin()
     {
-        return redirect()->route('login');
+        return redirect()->route('login')->with('fail', 'Debes ingresar a tu cuenta primero');
     }
 
     public function deleteProduct($productId)

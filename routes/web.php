@@ -19,10 +19,10 @@ Route::controller(HomeController::class)->group(function () {
 Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logout')->name('logout')->middleware('auth');
     Route::middleware('guest')->group(function () {
-        Route::get('/login', 'loginView')->name('login.view')->middleware('guest');
-        Route::post('/login', 'login')->name('login')->middleware('guest');
-        Route::get('/register', 'registerView')->name('register.view')->middleware('guest');
-        Route::post('/register', 'register')->name('register')->middleware('guest');
+        Route::get('/login', 'loginView')->name('login.view');
+        Route::post('/login', 'login')->name('login');
+        Route::get('/register', 'registerView')->name('register.view');
+        Route::post('/register', 'register')->name('register');
     });
 });
 

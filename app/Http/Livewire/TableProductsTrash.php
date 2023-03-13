@@ -25,7 +25,10 @@ class TableProductsTrash extends Component
         $this->render();
     }
 
-    
+    public function redirectToLogin()
+    {
+        return redirect()->route('login')->with('fail', 'Debes ingresar a tu cuenta primero');
+    }
 
     public function restoreProduct($productId)
     {

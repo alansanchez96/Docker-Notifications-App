@@ -56,13 +56,17 @@
                                 {{ $product->description }}
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <button wire:click.prevent="restoreProduct({{ $product->id }})" wire:method="patch"
-                                    wire:loading.attr="disabled"
-                                    class="px-4 py-2 bg-emerald-500 text-gray-100 rounded-xl font-bold hover:bg-emerald-600">Restaurar</button>
+                                <button wire:method="patch" wire:loading.attr="disabled"
+                                    wire:click.prevent="{{ auth()->check() ? 'restoreProduct(' . $product->id . ')' : 'redirectToLogin' }}"
+                                    class="px-4 py-2 bg-emerald-500 text-gray-100 rounded-xl font-bold hover:bg-emerald-600">
+                                    Restaurar
+                                </button>
 
-                                <button wire:click.prevent="forceDeleteProduct({{ $product->id }})"
-                                    wire:method="delete" wire:loading.attr="disabled"
-                                    class="px-4 py-2 bg-red-800 text-gray-100 rounded-xl font-bold hover:bg-red-900">Eliminar</button>
+                                <button wire:method="delete" wire:loading.attr="disabled"
+                                    wire:click.prevent="{{ auth()->check() ? 'forceDeleteProduct(' . $product->id . ')' : 'redirectToLogin' }}"
+                                    class="px-4 py-2 bg-red-800 text-gray-100 rounded-xl font-bold hover:bg-red-900">
+                                    Eliminar
+                                </button>
 
                             </td>
                         </tr>

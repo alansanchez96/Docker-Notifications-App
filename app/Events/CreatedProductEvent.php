@@ -45,7 +45,7 @@ class CreatedProductEvent implements ShouldBroadcast
     {
         $message = 'El usuario ';
         $message .= $this->user->name;
-        $message .= ' ha creado el producto <span class="text-bold text-green-700">';
+        $message .= ' ha creado el producto <span class="font-bold text-green-700">';
         $message .= $this->product->name;
         $message .= '</span>';
 
