@@ -17,7 +17,7 @@ Route::controller(HomeController::class)->group(function () {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/logout', 'logout')->name('logout');
+    Route::post('/logout', 'logout')->name('logout')->middleware('auth');
     Route::middleware('guest')->group(function () {
         Route::get('/login', 'loginView')->name('login.view')->middleware('guest');
         Route::post('/login', 'login')->name('login')->middleware('guest');
@@ -32,9 +32,6 @@ Route::controller(ProductController::class)->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/products/trash', 'trash')->name('product.trash');
         Route::post('/create/product', 'store')->name('product.store');
-        Route::delete('/softDelete/product/{product}', 'destroy')->name('product.destroy');
-        Route::delete('/forceDelete/product/{product}', 'forceDelete')->name('product.forceDelete');
-        Route::patch('/restore/product/{product}', 'restore')->name('product.restore');
     });
 });
 

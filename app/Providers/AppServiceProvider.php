@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Illuminate\Support\Facades\Validator::extend('rar', function ($attribute, $value, $parameters, $validator) {
+            return $value->getClientMimeType() === 'application/x-rar-compressed';
+        });
     }
 }

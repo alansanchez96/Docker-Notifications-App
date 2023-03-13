@@ -10,7 +10,6 @@
     @elseif (session('fail'))
         @include('components.toast-failed')
     @endif
-    <div id="toast"></div>
     <ol>
         <li>
             <a class="text-center block mx-auto rounded-xl my-4 text-white py-4 px-6 w-3/4 hover:text-rose-500 bg-gray-900 font-bold"

@@ -42,7 +42,7 @@ class CacheComposite
                 ->with(['category' => fn ($q) => $q->select('id', 'name')])
                 ->get();
 
-        if ($type === 'categories')
+        if ($type === 'categories' || 'files')
             $collection = $class::select($columns)->get();
 
         return $collection;

@@ -22,7 +22,7 @@ class FileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|mimetypes:audio/x-wav,video/mpeg,video/x-msvideo,text/csv,image/gif,image/jpeg,application/pdf,application/x-rar-compressed,image/webp,application/vnd.ms-excel,application/zip'
+            'file' => 'required|mimetypes:audio/x-wav,video/mpeg,video/x-msvideo,video/mp4,text/csv,image/gif,image/jpeg,application/pdf,zip,rar,image/webp,application/vnd.ms-excel,application/zip|max:50000'
         ];
     }
 }

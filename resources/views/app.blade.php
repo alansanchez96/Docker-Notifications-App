@@ -21,7 +21,10 @@
 <body class="container mx-auto bg-gray-200">
 
     @yield('content')
-
+    <div id="toast"></div>
+    @auth
+        @include('auth.userId')
+    @endauth
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
     @yield('scripts')
     @livewireScripts
