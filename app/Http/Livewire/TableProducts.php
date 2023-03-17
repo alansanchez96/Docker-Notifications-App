@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Classes\Facades\CacheComposite;
+use App\Events\Products\SoftDeletedProductEvent;
 
 class TableProducts extends Component
 {
@@ -45,7 +46,11 @@ class TableProducts extends Component
 
     public function deleteProduct($productId)
     {
-        Product::findOrFail($productId)->delete();
+        $product = Product::findOrFail($productId);
+
+        event(new SoftDeletedProductEvent($product, auth()->user()));
+
+        $product->delete();
 
         CacheComposite::updateCache(
             Product::class,

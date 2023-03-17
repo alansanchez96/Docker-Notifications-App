@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire;
 
-use App\Classes\Facades\CacheComposite;
 use App\Models\Product;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use App\Classes\Facades\CacheComposite;
+use App\Events\Products\RestoredProductEvent;
 
 class TableProductsTrash extends Component
 {
@@ -32,7 +34,11 @@ class TableProductsTrash extends Component
 
     public function restoreProduct($productId)
     {
-        Product::withTrashed()->findOrFail($productId)->restore();
+        $product = Product::onlyTrashed()->findOrFail($productId);
+
+        event(new RestoredProductEvent($product, Auth::user()));
+
+        $product->restore();
 
         CacheComposite::updateCache(
             Product::class,
@@ -45,7 +51,9 @@ class TableProductsTrash extends Component
 
     public function forceDeleteProduct($productId)
     {
-        Product::onlyTrashed()->findOrFail($productId)->forceDelete();
+        $product = Product::onlyTrashed()->findOrFail($productId);
+
+        $product->forceDelete();
 
         CacheComposite::updateCache(
             Product::class,

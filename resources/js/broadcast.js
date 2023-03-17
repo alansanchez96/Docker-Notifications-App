@@ -57,9 +57,6 @@ const responseNotification = await axios.get(getUrl('/api/notifications-unread',
 const notifications = responseNotification.data.data;
 const notificationIds = notifications.map(notification => notification.id);
 
-
-console.log(notificationIds);
-
 // Laravel Echo
 window.Echo.channel('created-product-channel')
     .listen('.CreatedProduct', (data) => {
@@ -87,6 +84,26 @@ window.Echo.private(`file-upload-channel.${userId}`)
         }, 5000);
         axiosInit();
     })
+
+window.Echo.private(`restored-product-channel.${userId}`)
+    .listen('.RestoredProduct', data => {
+        toastNotify(toast, data.message);
+        setTimeout(() => {
+            toast.innerHTML = null;
+        }, 5000);
+        axiosInit();
+    })
+
+window.Echo.private(`softdeleted-product-channel.${userId}`)
+    .listen('.SoftDeletedProduct', data => {
+        toastNotify(toast, data.message);
+        setTimeout(() => {
+            toast.innerHTML = null;
+        }, 5000);
+        axiosInit();
+    })
+
+
 
 notificationIds.forEach(notificationId => {
     window.Echo.private(`notification-read-channel.${notificationId}`)

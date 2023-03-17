@@ -4,10 +4,10 @@ namespace App\Listeners;
 
 use App\Models\User;
 use App\Models\Product;
-use App\Events\CreatedProductEvent;
 use App\Classes\Facades\CacheComposite;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Events\Products\CreatedProductEvent;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\CreatedProductNotification;
 
