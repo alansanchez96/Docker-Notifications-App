@@ -1,12 +1,73 @@
+const getUrl = (notification, userId) => 'http://' + window.location.host + `${notification}/${userId}`;
+
+function getNotificationElement(notificationType, read) {
+    let suffix = read ? 'Read' : 'Unread';
+    let element = '';
+    switch (notificationType) {
+        case 'App\\Notifications\\CreatedProductNotification':
+            element = document.querySelector(`#createdProduct${suffix}`);
+            break;
+        case 'App\\Notifications\\AuthUserHasSentEmailsNotification':
+            element = document.querySelector(`#authUserHasSentEmails${suffix}`);
+            break;
+        case 'App\\Notifications\\ReceiveEmailNotification':
+            element = document.querySelector(`#receiveEmail${suffix}`);
+            break;
+        default:
+            element = '';
+    }
+    return element;
+}
+
+// Función para obtener el mensaje de la notificación según su tipo
+function getNotificationMessage(notificationType, data) {
+    let message = '';
+    switch (notificationType) {
+        case 'App\\Notifications\\CreatedProductNotification':
+            message = `<div class="text-gray-200 text-center text-sm mb-1.5">Se ha creado un nuevo producto: <span class="font-bold text-emerald-600">${data.product_name}</span>`;
+            break;
+        case 'App\\Notifications\\AuthUserHasSentEmailsNotification':
+            message = `<div class="text-gray-200 text-center text-sm mb-1.5">Hola <span class="font-bold text-emerald-600">${data.user_name}, </span>has enviado un correo a todos los usuarios registrados`;
+            break;
+        case 'App\\Notifications\\ReceiveEmailNotification':
+            message = `<div class="text-gray-200 text-center text-sm mb-1.5">Hola <span class="font-bold text-emerald-600">${data.user_name}, </span>has recibido un tipo de notificacion general por parte de <span class="font-bold text-emerald-600">${data.userAuthor_name}</span>`;
+            break;
+        default:
+            message = '';
+    }
+    return message;
+}
+
+// Función para marcar una notificación como leída
+function markNotificationAsRead(notificationId) {
+    window.axios.post(getUrl('/read-notification', notificationId),
+        { id: notificationId, user_id: userId })
+        .then(response => {
+            let notificationElements = document.querySelectorAll('.notification');
+            notificationElements.forEach(function (element) {
+                element.remove();
+            });
+            axiosInit();
+        })
+}
+
 const userId = document.querySelector('#userId').value;
 const toast = document.querySelector('#toast');
+const responseNotification = await axios.get(getUrl('/api/notifications-unread', userId));
+const notifications = responseNotification.data.data;
+const notificationIds = notifications.map(notification => notification.id);
 
+
+console.log(notificationIds);
+
+// Laravel Echo
 window.Echo.channel('created-product-channel')
     .listen('.CreatedProduct', (data) => {
         toastNotify(toast, data.message);
         setTimeout(() => {
             toast.innerHTML = null;
         }, 5000);
+        axiosInit();
     })
 
 window.Echo.channel('email-submitted-channel')
@@ -15,6 +76,7 @@ window.Echo.channel('email-submitted-channel')
         setTimeout(() => {
             toast.innerHTML = null;
         }, 5000);
+        axiosInit();
     })
 
 window.Echo.private(`file-upload-channel.${userId}`)
@@ -23,7 +85,85 @@ window.Echo.private(`file-upload-channel.${userId}`)
         setTimeout(() => {
             toast.innerHTML = null;
         }, 5000);
+        axiosInit();
     })
+
+notificationIds.forEach(notificationId => {
+    window.Echo.private(`notification-read-channel.${notificationId}`)
+        .listen('.NotificationRead', data => {
+            toastNotify(toast, data.message);
+            setTimeout(() => {
+                toast.innerHTML = null;
+            }, 5000);
+        })
+})
+
+function axiosInit() {
+    window.axios.get(getUrl('/api/notifications-unread', userId))
+        .then(response => {
+            document.querySelector('.unread-notifications-count').innerHTML = `${response.data.data.length}`;
+
+            response.data.data.forEach(notification => {
+
+                let notificationType = notification.type;
+                let notificationMessage = getNotificationMessage(notificationType, notification.data);
+
+                let notificationElement = getNotificationElement(notificationType, false);
+
+                let notificationId = `notification-${notification.id}`;
+                if (document.querySelector(`#${notificationId}`) !== null) {
+                    return;
+                }
+
+                notificationElement.innerHTML += `
+                            <div id="${notificationId}" class="flex px-4 py-3 cursor-pointer bg-gray-800 hover:bg-gray-900 divide-y-3 border-red-900 notification" data-notification-id="${notification.id}">
+                                <div class="w-full">
+                                        ${notificationMessage}
+                                        <div class="text-xs text-gray-400">
+                                            ${notification.created_at}
+                                        </div>
+                                        <button class="text-xs text-blue-400 hover:text-blue-600 hover:underline mark-as-read" data-notification-id="${notification.id}">
+                                            Marcar como leída
+                                        </button>
+                                    </div> 
+                                </div> 
+                            </div>
+                        `;
+
+                let markAsReadButtons = notificationElement.querySelectorAll('.mark-as-read');
+                markAsReadButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        let notificationId = this.dataset.notificationId;
+                        markNotificationAsRead(notificationId);
+                        this.disabled = true;
+                    });
+                });
+            });
+        })
+    window.axios.get(getUrl('/api/notifications-read', userId))
+        .then(response => {
+            response.data.data.forEach(notification => {
+
+                let notificationType = notification.type;
+                let notificationMessage = getNotificationMessage(notificationType, notification.data);
+
+                let notificationElement = getNotificationElement(notificationType, true);
+                notificationElement.innerHTML += `
+                            <div class="flex px-4 py-3 cursor-pointer bg-gray-800 hover:bg-gray-900 divide-y-3 border-red-900 notification">
+                                <div class="w-full">
+                                        ${notificationMessage}
+                                        <div class="text-xs text-stone-400">
+                                            ${notification.created_at}
+                                        </div>
+                                    </div> 
+                                </div> 
+                            </div>
+                        `;
+            });
+        })
+}
+
+axiosInit()
 
 function toastNotify(element, message) {
     element.innerHTML = `<div id="toast-success"
@@ -52,5 +192,3 @@ function toastNotify(element, message) {
 </div>
 `;
 }
-
-

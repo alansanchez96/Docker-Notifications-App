@@ -12,8 +12,8 @@ Route::get('/send-mails', [MailController::class, 'sendMails'])->name('mail.send
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('welcome');
-    Route::get('/markAsRead', 'markAsRead')->name('markAsRead')->middleware('auth');
-    Route::post('/read-notification/{id}', 'readNotification')->name('readNotification')->middleware('auth');
+    Route::get('/markAsRead', 'markAsRead')->name('markAsRead');
+    Route::post('/read-notification/{id}', 'readNotification')->name('readNotification');
 });
 
 Route::controller(AuthController::class)->group(function () {
