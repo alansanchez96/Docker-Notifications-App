@@ -36,7 +36,7 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        $product = Product::create($request->all());
+        $product = Product::create($request->validated());
 
         event(new CreatedProductEvent($product, auth()->user()));
 

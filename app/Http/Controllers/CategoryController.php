@@ -16,7 +16,7 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        Category::create($request->all());
+        Category::create($request->only(['name']));
         CacheComposite::updateCache(Category::class, 'categories', ['id', 'name']);
 
         return redirect()->route('product.index');
