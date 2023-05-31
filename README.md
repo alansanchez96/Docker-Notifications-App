@@ -48,19 +48,23 @@
         $ docker exec lv_app composer install
     ```
 
-4) Corremos las migraciones y el seeder
+5) Duplicamos nuestras variables de entorno y generamos nuestro APP_KEY
 
     ```bash
-        $ docker exec lv_app php artisan migrate --seed
+        $ docker exec lv_app cp .env.example .env
     ```
-
-5) Añadimos una key a nuestra variable de entorno APP_KEY
 
     ```bash
         $ docker exec lv_app php artisan key:generate
     ```
 
-4) Ejecutamos los servicios con supervisor
+5) Corremos las migraciones y el seeder
+
+    ```bash
+        $ docker exec lv_app php artisan migrate --seed
+    ```
+
+6) Ejecutamos los procesos con supervisor (queues y websockets)
     
     ```bash
         $ docker exec lv_app supervisord -n
