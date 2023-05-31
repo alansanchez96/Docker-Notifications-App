@@ -1,7 +1,7 @@
 @extends('app')
 @include('components.navbar')
 
-<form action="{{ route('register') }}" class="w-3/4 xl:w-2/6 mx-auto my-10 p-10 rounded-xl bg-stone-300">
+<form action="{{ route('register') }}" class="w-3/4 xl:w-2/6 mx-auto my-10 p-10 rounded-xl bg-stone-300" method="post">
     @csrf
     <h1 class="text-center text-gray-900 mx-auto font-bold text-3xl my-10">
         Registra tu cuenta
