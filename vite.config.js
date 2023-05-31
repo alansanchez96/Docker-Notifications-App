@@ -8,4 +8,16 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    // Conectar Front
+    server: {
+        host: '0.0.0.0',
+        port: 5200,
+        hmr: {
+            host: 'localhost'
+        },
+        watch: {
+            usePolling: true
+        }
+    },
 });
+

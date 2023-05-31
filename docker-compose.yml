@@ -1,0 +1,99 @@
+version: '3.8'
+services:
+
+  lv_nginx:
+    image: nginx:alpine
+    restart: always
+    container_name: lv_nginx
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/:/etc/nginx/conf.d
+    networks:
+      - app_network
+
+  lv_database:
+    image: mysql:8.0.33
+    restart: unless-stopped
+    container_name: lv_database
+    environment:
+      - MYSQL_USER=lv_database
+      - MYSQL_PASSWORD=lv_database
+      - MYSQL_DATABASE=lv_database
+      - MYSQL_ROOT_PASSWORD=lv_database
+    ports:
+      - 3307:3306
+    volumes:
+      - lv_database:/var/lib/mysql
+      - /var/run/mysqld:/var/run/mysqld
+    networks:
+      - app_network
+
+  lv_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lv_app
+    working_dir: /var/www
+    ports:
+      - 9000:9000
+      - 6001:6001
+    networks:
+      - app_network
+    volumes:
+      - ./:/var/www
+
+  lv_node:
+    image: node:lts-alpine
+    container_name: lv_node
+    working_dir: /var/www
+    ports:
+      - 5200:5200
+    volumes:
+      - ./:/var/www
+      - /var/www/node_modules
+    command: sh /var/www/docker/node_start.sh
+    networks:
+      - app_network
+
+  # Redis para almacenamiento
+  redis:
+    image: redis:alpine
+    command: redis-server --save 60 1 --loglevel warning
+    container_name: redis
+    networks:
+      - app_network
+    ports:
+      - 6379:6379
+    volumes:
+      - lv_redis:/data
+
+  # Redis para comandos de administracion
+  # redis-cli:
+  #   image: redis:alpine
+  #   container_name: redis_cli
+  #   command: redis-cli -h redis
+  #   networks:
+  #     - app_network
+
+  lv_mailhog:
+    image: mailhog/mailhog:latest
+    container_name: lv_mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - app_network
+
+volumes:
+  lv_database:
+  lv_redis:
+
+
+networks:
+  app_network:
+    name: app_net
+    driver: bridge
+    ipam:
+      driver: default
