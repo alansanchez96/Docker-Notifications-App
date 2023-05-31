@@ -13,11 +13,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $users = CacheComposite::getCacheOrCreate(
-            'users',
-            User::class,
-            ['id', 'name']
-        );
+        $users = User::select('id', 'name')->get();
 
         return view('welcome', compact('users'));
     }
